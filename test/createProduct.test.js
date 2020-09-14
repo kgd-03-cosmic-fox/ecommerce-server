@@ -11,13 +11,18 @@ const productInput = {
     stock: 50
 }
 
-const userLogin = {
+let userLogin = {
     name:"Rafael",
     email:"raf@gmail.com",
+    isAdmin:true,
     password:"1234"
 }
 
+let isNotAdmin = {...userLogin,isAdmin:false}
+
 let dummyAccessToken;
+
+let dummyIsNotAdmin;
 
 describe("POST Product /Product",()=>{ 
     afterAll((done)=>{
@@ -33,11 +38,21 @@ describe("POST Product /Product",()=>{
             })
     })
     beforeAll((done)=>{
-         dummyAccessToken = jwt.sign({name:userLogin,name:userLogin.email},process.env.JWT_SECRET_KEY)
+         dummyAccessToken = jwt.sign({
+             name:userLogin.name,
+             email:userLogin.email,
+             isAdmin:userLogin.isAdmin
+            },process.env.JWT_SECRET_KEY)
+
+         dummyIsNotAdmin = jwt.sign({
+             name:isNotAdmin.name,
+             email:isNotAdmin.email,
+             isAdmin:isNotAdmin.isAdmin
+            },process.env.JWT_SECRET_KEY)
         done()
     })
     describe("POST Product(SUCCESS)",()=>{
-        test("Returning id, name and stok actua",(done)=>{
+        test("Returning id, name and stok actual",(done)=>{
             request(app)
             .post("/product")
             .send(productInput)
@@ -63,6 +78,18 @@ describe("POST Product /Product",()=>{
                 if(err){throw err}
                 expect(res.status).toBe(401)
                 expect(res.body).toHaveProperty("err","Failed to authenticate")
+                done()
+            })
+        })
+        test("Error because access_token is not verified",(done)=>{
+            request(app)
+            .post(`/product`)
+            .set("access_token", dummyIsNotAdmin)
+            .send(productInput)
+            .end((err,res)=>{
+                if(err){throw err}
+                expect(res.status).toBe(401)
+                expect(res.body).toHaveProperty("err","Unauthorized")
                 done()
             })
         })
