@@ -1,11 +1,9 @@
 const request = require(`supertest`)
 const app = require("../app")
+const jwt = require(`jsonwebtoken`)
+require('dotenv').config()
 
 const {Product} = require(`../models`)
-
-function cleanUpDatabase(db){
-     db.cleanUp()
-}
 
 const productInput = {
     name:"Shampo Clean 250ml",
@@ -13,15 +11,37 @@ const productInput = {
     stock: 50
 }
 
+const userLogin = {
+    name:"Rafael",
+    email:"raf@gmail.com",
+    password:"1234"
+}
+
+let dummyAccessToken;
+
 describe("POST Product /Product",()=>{ 
-    // afterAll(()=>{
-    //     cleanUpDatabase(Product)
-    // })
+    afterAll((done)=>{
+            return Product.destroy({
+                where:{},
+                truncate:true
+            })
+            .then(_=>{
+                done()
+            })
+            .catch(err=>{
+                done(err)
+            })
+    })
+    beforeAll((done)=>{
+         dummyAccessToken = jwt.sign({name:userLogin,name:userLogin.email},process.env.JWT_SECRET_KEY)
+        done()
+    })
     describe("POST Product(SUCCESS)",()=>{
         test("Returning id, name and stok actua",(done)=>{
             request(app)
             .post("/product")
             .send(productInput)
+            .set("access_token", dummyAccessToken)
             .end((err,res)=>{
                 if(err){throw err}
                 expect(res.status).toBe(201)
@@ -34,11 +54,17 @@ describe("POST Product /Product",()=>{
             })
         })
     })
-    // describe("POST Product(ERROR)",()=>{
-    //     test("Error because access_token is not included",(done)=>{
-    //         request(app)
-    //         .post("/product")
-    //         .send("")
-    //     })
-    // })
+    describe("POST Product(ERROR)",()=>{
+        test("Error because access_token is undefined",(done)=>{
+            request(app)
+            .post("/product")
+            .send(productInput)
+            .end((err,res)=>{
+                if(err){throw err}
+                expect(res.status).toBe(401)
+                expect(res.body).toHaveProperty("err","Failed to authenticate")
+                done()
+            })
+        })
+    })
 })
