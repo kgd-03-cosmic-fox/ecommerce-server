@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
         isInt:{
           args:[true],
           msg: 'Invalid DataTypes of price'
+        },
+        min:{
+          args:[0],
+          msg:'Price cannot be filled with negative numbers'
         }
       }
     },
@@ -85,6 +89,10 @@ module.exports = (sequelize, DataTypes) => {
         isInt:{
           args:[true],
           msg: 'Invalid DataTypes of stock'
+        },
+        min:{
+          args:[0],
+          msg:'Stock cannot be filled with negative numbers'
         }
       }
     },

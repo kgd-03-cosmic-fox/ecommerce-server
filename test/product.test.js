@@ -155,13 +155,13 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test.only("adding item with different DataTypes of price",(done) =>{
+      test("adding item with different DataTypes of price",(done) =>{
         request(app)
         .post('/')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
-          price:'300000',
+          price:'asdasd',
           stock:5
         })
         .expect(400)
@@ -175,14 +175,14 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test.only("adding item with different DataTypes of stock",(done) =>{
+      test("adding item with different DataTypes of stock",(done) =>{
         request(app)
         .post('/')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
           price:50000,
-          stock:'5'
+          stock:'sdhas'
         })
         .expect(400)
         .end(function(err,res){
@@ -197,40 +197,41 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test("adding item with null value",(done) =>{
+      test.only("adding item without access_token",(done) =>{
         request(app)
         .post('/')
         .send({
-          name:'',
-          image_url:'',
-          price:'',
-          stock:''
+          name:'sneakers',
+          image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
+          price:50000,
+          stock:5
         })
-        .expect(400)
+        .expect(401)
         .end(function(err,res){
           if(err){
             done(err)
           }
           else{
-            expect(res.body.message).toBe('cannot filled with null value')
+            expect(res.body.message).toBe('Auth Fail')
+            done()
           }
         })
       })
     })
-    // afterAll((done) =>{
-    //   Product.destroy({
-    //     where:{},
-    //     truncate:true
-    //   })
-    //   .then(data =>{
-    //     console.log(data)
-    //     console.log('item has been cleared')
-    //     done()
-    //   })
-    //   .catch(err =>{
-    //     console.log(err)
-    //     done(err)
-    //   })
-    // })
+    afterAll((done) =>{
+      Product.destroy({
+        where:{},
+        truncate:true
+      })
+      .then(data =>{
+        console.log(data)
+        console.log('item has been cleared')
+        done()
+      })
+      .catch(err =>{
+        console.log(err)
+        done(err)
+      })
+    })
   })
 })
