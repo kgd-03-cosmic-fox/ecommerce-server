@@ -1,0 +1,38 @@
+{
+  "name": "ecommerce-server",
+  "version": "1.0.0",
+  "description": "ecommerce-server",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jest": "^26.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.4",
+    "pg": "^8.3.3",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  },
+  "scripts": {
+    "test": "jest --verbose --runInBand --detectOpenHandles --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudiovivaldi12/ecommerce-server.git"
+  },
+  "keywords": [],
+  "author": "dio_valdi12",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/claudiovivaldi12/ecommerce-server/issues"
+  },
+  "homepage": "https://github.com/claudiovivaldi12/ecommerce-server#readme"
+}
