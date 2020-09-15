@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require('bcryptjs');
 const {
   Model
 } = require('sequelize');
@@ -38,5 +39,28 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
+  User.addHook('beforeBulkCreate', (data) => {
+    const salt = bcrypt.genSaltSync(10);
+    if (Array.isArray(data)) {
+      data.forEach((el) => {
+        el.password = bcrypt.hashSync(el.password, salt);
+      })
+    } else {
+      data.password = bcrypt.hashSync(data.password, salt);
+    }
+  })
+
+  User.addHook('beforeCreate', (data) => {
+    const salt = bcrypt.genSaltSync(10);
+    if (Array.isArray(data)) {
+      data.forEach((el) => {
+        el.password = bcrypt.hashSync(el.password, salt);
+      })
+    } else {
+      data.password = bcrypt.hashSync(data.password, salt);
+    }
+  })
+
   return User;
 };

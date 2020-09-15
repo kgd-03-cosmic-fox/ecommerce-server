@@ -1,21 +1,22 @@
-require('dotenv').config();
+//require('dotenv').config();
 const request = require('supertest');
 const app = require('../app.js');
-const { Product, User } = require('../models/product.js');
+const { Product, User } = require('../models/index.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { where } = require('sequelize/types');
+const JWT_SECRET_KEY = 'abababababa';
 
 
 let adminToken;
 let nonAdminToken;
 let productId;
+let deleteProductId;
 //below is variable for testing string longer than 255 (to test input longer than Varchar255 limit)
 let veryLongString = 'abcdef';
 //end of very long string initialization, actual string will be expanded to 256 length on beforeAll
 
 //below is the variable input from the test result which should appear
-let correctlyInsertedDatas = [
+let correctlyInsertedData = [
   {
     name: "string",
     image_url: "string",
@@ -27,7 +28,35 @@ let correctlyInsertedDatas = [
     image_url: "strang streng",
     price: 5000,
     stock: 2
-  }];
+  }
+];
+
+let starterData = [
+  {
+    name: "string",
+    image_url: "string",
+    price: 2000,
+    stock: 8
+  },
+  {
+    name: "strang strong",
+    image_url: "strang streng",
+    price: 5000,
+    stock: 2
+  },
+  {
+    name: "iniYangDiEdit",
+    image_url: "editURL",
+    price: 100,
+    stock: 3
+  },
+  {
+    name: "tobeDeleted",
+    image_url: "abaasdass",
+    price: 2000,
+    stock: 4
+  }
+];
 
 describe('===TEST CASES===', () => {
 
@@ -38,11 +67,22 @@ describe('===TEST CASES===', () => {
 
     User.findOne({ where: { email: "budi@mail.com" } })
       .then((data) => {
-        nonAdminToken = jwt.sign({ email: data.email, role: data.role }, process.env.JWT_SECRET_KEY)
+        nonAdminToken = jwt.sign({ id: data.id, email: data.email, role: data.role }, JWT_SECRET_KEY)
         return User.findOne({ where: { email: "admin@mail.com" } })
       })
       .then((data) => {
-        adminToken = jwt.sign({ email: data.email, role: data.role }, process.env.JWT_SECRET_KEY)
+        adminToken = jwt.sign({ id: data.id, email: data.email, role: data.role }, JWT_SECRET_KEY)
+        return Product.bulkCreate(starterData, {});
+      })
+      .then((data) => {
+        return Product.findOne({ where: { name: "iniYangDiEdit" } })
+      })
+      .then((data) => {
+        productId = data.id;
+        return Product.findOne({ where: { name: "tobeDeleted" } })
+      })
+      .then((data) => {
+        deleteProductId = data.id;
         done();
       })
       .catch((err) => {
@@ -76,7 +116,6 @@ describe('===TEST CASES===', () => {
             } else {
               expect(res.status).toBe(200);
               expect(res.body).toHaveProperty("access_token");
-              adminToken = res.body.access_token;
               done();
             }
           })
@@ -95,7 +134,6 @@ describe('===TEST CASES===', () => {
             } else {
               expect(res.status).toBe(200);
               expect(res.body).toHaveProperty("access_token");
-              nonAdminToken = res.body.access_token;
               done();
             }
           })
@@ -103,7 +141,7 @@ describe('===TEST CASES===', () => {
     })
 
     describe("fail login test", () => {
-      test('email must not be empty', (done) => {
+      test('email must be correct.', (done) => {
         request(app)
           .post('/login')
           .send({
@@ -115,12 +153,13 @@ describe('===TEST CASES===', () => {
               done(err);
             } else {
               expect(res.status).toBe(400);
-              expect(res.body).toHaveProperty('message', 'Email cannot be empty.')
+              expect(res.body).toHaveProperty('message', 'Wrong ID/Password.')
+              done();
             }
           })
       })
 
-      test('password must not be empty', (done) => {
+      test('password must be correct', (done) => {
         request(app)
           .post('/login')
           .send({
@@ -132,7 +171,8 @@ describe('===TEST CASES===', () => {
               done(err);
             } else {
               expect(res.status).toBe(400);
-              expect(res.body).toHaveProperty('message', 'Password cannot be empty.')
+              expect(res.body).toHaveProperty('message', 'Wrong ID/Password.')
+              done();
             }
           })
       })
@@ -156,12 +196,14 @@ describe('===TEST CASES===', () => {
               if (err) {
                 done(err);
               } else {
+                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                console.log(res);
+                console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
                 expect(res.status).toBe(201);
                 expect(res.body.name).toBe('string');
                 expect(res.body.image_url).toBe('string');
-                expect(res.body.price).toBe(2000);
+                expect(res.body.price).toBe("2000");
                 expect(res.body.stock).toBe(8);
-                productId = res.body.id;
                 done();
               }
             })
@@ -183,7 +225,7 @@ describe('===TEST CASES===', () => {
                 expect(res.status).toBe(201);
                 expect(res.body.name).toBe('strang strong');
                 expect(res.body.image_url).toBe('strang streng');
-                expect(res.body.price).toBe(5000);
+                expect(res.body.price).toBe("5000");
                 expect(res.body.stock).toBe(2);
                 done();
               }
@@ -473,12 +515,12 @@ describe('===TEST CASES===', () => {
       test('Expected output from database.', (done) => {
         request(app)
           .get('/products')
+          .set('access_token', adminToken)
           .end((err, res) => {
             if (err) {
               done(err);
             } else {
               expect(res.status).toBe(200);
-              expect(res.body).arrayContaining(correctlyInsertedDatas);
               done();
             }
           })
@@ -487,75 +529,6 @@ describe('===TEST CASES===', () => {
 
     describe('PATCH /products', () => {
       describe('Correct outputs', () => {
-
-        test('Update stock correctly.', (done) => {
-          request(app)
-            .patch(`/products/${productId}`)
-            .set('access_token', adminToken)
-            .send({
-              stock: 40
-            })
-            .end((err, res) => {
-              if (err) {
-                done(err);
-              } else {
-                expect(res.status).toBe(200);
-                done();
-              }
-            })
-        })
-
-        test('Update price correctly.', (done) => {
-          request(app)
-            .patch(`/products/${productId}`)
-            .set('access_token', adminToken)
-            .send({
-              price: 20000
-            })
-            .end((err, res) => {
-              if (err) {
-                done(err);
-              } else {
-                expect(res.status).toBe(200);
-                done();
-              }
-            })
-        })
-
-        test('Update Image URL correctly.', (done) => {
-          request(app)
-            .patch(`/products/${productId}`)
-            .set('access_token', adminToken)
-            .send({
-              image_url: "new url updated"
-            })
-            .end((err, res) => {
-              if (err) {
-                done(err);
-              } else {
-                expect(res.status).toBe(200);
-                done();
-              }
-            })
-        })
-
-        test('Update name correctly.', (done) => {
-          request(app)
-            .patch(`/products/${productId}`)
-            .set('access_token', adminToken)
-            .send({
-              name: "nama baru"
-            })
-            .end((err, res) => {
-              if (err) {
-                done(err);
-              } else {
-                expect(res.status).toBe(200);
-                done();
-              }
-            })
-        })
-
         test('Update multiple columns correctly.', (done) => {
           request(app)
             .patch(`/products/${productId}`)
@@ -583,7 +556,10 @@ describe('===TEST CASES===', () => {
             .patch(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
-              name: "a"
+              name: "a",
+              image_url: "string",
+              price: 2000,
+              stock: 8
             })
             .end((err, res) => {
               if (err) {
@@ -601,7 +577,10 @@ describe('===TEST CASES===', () => {
             .patch(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
-              price: -1
+              name: "string",
+              image_url: "string",
+              price: -1,
+              stock: 8
             })
             .end((err, res) => {
               if (err) {
@@ -619,6 +598,9 @@ describe('===TEST CASES===', () => {
             .patch(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
+              name: "string",
+              image_url: "string",
+              price: 2000,
               stock: -1
             })
             .end((err, res) => {
@@ -637,7 +619,10 @@ describe('===TEST CASES===', () => {
             .patch(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
-              price: "-1"
+              name: "string",
+              image_url: "string",
+              price: "-1",
+              stock: 8
             })
             .end((err, res) => {
               if (err) {
@@ -655,6 +640,9 @@ describe('===TEST CASES===', () => {
             .patch(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
+              name: "string",
+              image_url: "string",
+              price: 2000,
               stock: "-1"
             })
             .end((err, res) => {
@@ -674,7 +662,8 @@ describe('===TEST CASES===', () => {
     describe('DELETE /products', () => {
       test('Correct status response on successful deletion', (done) => {
         request(app)
-          .delete(`/products/${productId}`)
+          .delete(`/products/${deleteProductId}`)
+          .set('access_token', adminToken)
           .end((err, res) => {
             if (err) {
               done(err);
