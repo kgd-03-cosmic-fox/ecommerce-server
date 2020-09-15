@@ -4,8 +4,8 @@ class ProductController{
     Product.create({
       name:req.body.name,
       image_url:req.body.image_url,
-      price:req.body.price,
-      stock:req.body.stock
+      price:Number(req.body.price),
+      stock:Number(req.body.stock)
     })
     .then(data =>{
       res.status(201).json({
@@ -18,12 +18,21 @@ class ProductController{
       console.log(err)
     })
   }
+  static getProduct(err,res,next){
+    Product.findAll()
+    .then(product =>{
+      res.status(200).json(product)
+    })
+    .catch(err =>{
+      next(err)
+    })
+  }
   static putProduct(req,res,next){
     Product.update({
       name:req.body.name,
       image_url:req.body.image_url,
-      price:req.body.price,
-      stock:req.body.stock
+      price:Number(req.body.price),
+      stock:Number(req.body.stock)
     }
   ,{
     where:{
