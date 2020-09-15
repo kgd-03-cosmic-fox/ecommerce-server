@@ -4,6 +4,7 @@ const router = express.Router()
 const ProductController = require('../controllers/product-controller.js')
 const authorization = require('../middlewares/authorize.js')
 
+router.get('/' , ProductController.getProduct)
 router.post('/' , authorization ,ProductController.postProduct)
 router.put('/:id' , authorization ,ProductController.putProduct)
 router.delete('/:id' , authorization ,ProductController.deleteProduct)

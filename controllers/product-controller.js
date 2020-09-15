@@ -2,6 +2,15 @@ const { Product } = require('../models')
 
 class ProductController{
 
+    static getProduct(req , res , next){
+        
+        Product.findAll()
+        .then(data=>{
+            res.status(200).json(data)
+        })
+        .catch(next)
+    }
+
     static postProduct(req , res , next){
 
         Product.create({
