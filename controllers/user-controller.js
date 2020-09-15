@@ -2,7 +2,6 @@ const {User} = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-
 class UserController{
 
     static login(req , res , next){
@@ -23,7 +22,9 @@ class UserController{
     
                     if(checkPassword){
                         
-                        let access_token = jwt.sign({ id : data.id , email : data.email} , 'ApAjAdAh')
+                        console.log(process.env.SECRET_KEY)
+
+                        let access_token = jwt.sign({ id : data.id , email : data.email} , process.env.SECRET_KEY)
     
                         res.status(200).json({
                             access_token,

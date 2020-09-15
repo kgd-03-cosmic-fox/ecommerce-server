@@ -18,6 +18,7 @@ describe('User Router' , () =>{
                 .expect(200)
                 .end(function(err , res){
                     if(err){
+                        console.log(err)
                         done(err)
                     }else{
 
@@ -25,7 +26,6 @@ describe('User Router' , () =>{
                         expect(res.body.email).toBe('admin@email.com')
                         expect(res.body).toHaveProperty('access_token')
                         done()
-
                     }
                 })
             }))
@@ -95,6 +95,7 @@ describe('User Router' , () =>{
             })
 
         })
+        
     })
     
 })

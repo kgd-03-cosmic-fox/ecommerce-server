@@ -144,7 +144,7 @@
 >
 >>**Code** : 400
 >>
->>**Content** :{**message** : 'all content cannot be empty'} (*if 1 or more  content empty*)
+>>**Content** :{**message** : 'all content cannot be empty , img_url must be url , price / stock cannot less than 0 and numbers only'} (*if all  content empty*)
 >
 >OR
 >>
@@ -162,7 +162,7 @@
 >>
 >>**Code** : 400
 >>
->>**Content** :{**message** : 'all content cannot be empty , image_url must be url and price / stock cannot less than 0 and numbers only'} (*if 1 or more content empty and image_url not url and price or stock < 0*)
+>>**Content** :{**message** : 'all content cannot be empty , image_url must be url , price / stock cannot less than 0 and numbers only'} (*if 1 or more content empty and image_url not url and price or stock < 0*)
 >
 >OR
 >>
@@ -232,7 +232,7 @@
 >
 >>**Code** : 400
 >>
->>**Content** :{**message** : 'all content cannot be empty'} (*if 1 or more  content empty*)
+>>**Content** :{**message** : 'all content cannot be empty , img_url must be url , price / stock cannot less than 0 and numbers only'} (*if all content empty*)
 >
 >OR
 >>
@@ -263,6 +263,12 @@
 >>**Code** : 401
 >>
 >>**Content** :{**message** : 'Not Authorized'} (*if user is not admin*)
+>
+>OR
+>>
+>>**Code** : 404
+>>
+>>**Content** :{**message** : 'Data Not Found'} (*if no data to update*)
 
 >**Sample Call** : { 
 > 
@@ -336,3 +342,8 @@
 >>})
 >
 }
+
+
+
+
+
