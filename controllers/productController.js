@@ -17,10 +17,8 @@ class ProductController{
                 stock:product.stock
             })
         })
-        .catch(err=>{
-            res.status(500).json({
-                message:"Internal server error"
-            })
+        .catch(_=>{
+            next()
         })
     }
 }

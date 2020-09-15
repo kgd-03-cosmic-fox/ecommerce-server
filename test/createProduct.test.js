@@ -5,12 +5,34 @@ require('dotenv').config()
 
 const {Product} = require(`../models`)
 
-const productInput = {
+
+//Object for inputing product
+let productInput = {
     name:"Shampo Clean 250ml",
     price:15000,
     stock: 50
 }
 
+//Product's object if name || price || stock isNull
+let productNameIsEmpty = {
+    // name:"Shampo Clean 250ml",
+    price:15000,
+    stock: 50
+}
+let productPriceIsEmpty = {
+    name:"Shampo Clean 250ml",
+    // price:15000,
+    stock: 50
+}
+let productstockIsEmpty = {
+    name:"Shampo Clean 250ml",
+    price:15000,
+    // stock: 50
+}
+
+
+
+//Object for logging-, isAdmin = true
 let userLogin = {
     name:"Rafael",
     email:"raf@gmail.com",
@@ -18,10 +40,11 @@ let userLogin = {
     password:"1234"
 }
 
+//Object if isAdmin = false
 let isNotAdmin = {...userLogin,isAdmin:false}
 
+//Declaration for global scope
 let dummyAccessToken;
-
 let dummyIsNotAdmin;
 
 describe("POST Product /Product",()=>{ 
@@ -93,5 +116,17 @@ describe("POST Product /Product",()=>{
                 done()
             })
         })
+        // test("Error because of empty required field (NAME)",(done)=>{
+        //     request(app)
+        //     .post("/product")
+        //     .set("access_token",dummyAccessToken)
+        //     .send(productNameIsEmpty)
+        //     .end((err,res)=>{
+        //         if(err){throw err}
+        //         expect(res.satus).toBe(400)
+        //         expect(res.body).toHaveProperty("error","Product's name is required")
+        //         done()
+        //     })
+        // })
     })
 })
