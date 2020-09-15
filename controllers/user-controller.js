@@ -23,7 +23,7 @@ class UserController{
         }
         else{
           if(bcrypt.compareSync(req.body.password,user.password)){
-            const access_token = jwt.sign({id:user.id,email:user.email},process.env.SECRET_KEY)
+            const access_token = jwt.sign({id:user.id,email:user.email,role:user.role},process.env.SECRET_KEY)
             return res.status(202).json({access_token,message:'Login Success'})
           }
           else{

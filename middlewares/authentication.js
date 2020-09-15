@@ -8,10 +8,10 @@ function authentication(req,res,next){
   }
   else{
     try{
-      const payload = jwt.verify(req.headers.token,process.env.SECRET_KEY)
+      const payload = jwt.verify(req.headers.access_token,process.env.SECRET_KEY)
       User.findOne({
         where:{
-          id:payload.id
+          email:payload.email
         }
       })
       .then(user =>{
@@ -30,6 +30,8 @@ function authentication(req,res,next){
       })
     }
     catch(err){
+      console.log('error on')
+      console.log(err)
       res.status(401).json({
         message:"Unauthorize Request"
       })
