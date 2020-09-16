@@ -45,11 +45,15 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     hooks :{
       beforeCreate(instance){
+  
+        if(!instance.role){
+          instance.role = 'customer'
+        }
         
         const salt = bcrypt.genSaltSync(10);
         instance.password = bcrypt.hashSync(instance.password, salt);
-        
-        instance.role = 'customer'
+
+
 
       }
     }

@@ -2,8 +2,6 @@ const { JsonWebTokenError } = require("jsonwebtoken")
 
 function errorHandler(err , req , res , next){
 
-    console.log(err)
-
     let message = ''
     status = err.status || 500
     

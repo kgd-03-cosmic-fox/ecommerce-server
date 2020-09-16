@@ -1,8 +1,39 @@
 const request = require('supertest')
 const app = require('../app.js')
-
+const {User} = require('../models')
 
 describe('User Router' , () =>{
+
+    beforeAll(done=>{
+        let userAdmin = {
+            email: "admin@email.com",
+            password: '1234'
+        }
+
+        User.create(userAdmin)
+            .then(data=>{
+                done()
+            })
+            .catch(err=>{
+                done(err)
+            })
+
+    })
+
+    afterAll(done=>{
+
+        User.destroy({
+            where :{},
+            truncate : true
+        })
+        .then(data=>{
+            done()
+        })
+        .catch(err=>{
+            done(err)
+        })
+
+    })
 
     describe("POST /login" , () =>{
 
@@ -18,11 +49,9 @@ describe('User Router' , () =>{
                 .expect(200)
                 .end(function(err , res){
                     if(err){
-                        console.log(err)
                         done(err)
                     }else{
-
-                        expect(res.body.id).toBe(1)
+                        expect(res.body).toHaveProperty('id')
                         expect(res.body.email).toBe('admin@email.com')
                         expect(res.body).toHaveProperty('access_token')
                         done()
@@ -59,7 +88,7 @@ describe('User Router' , () =>{
                 .post('/login')
                 .send({
                     email : 'admin@mail.com',
-                    password : '12345'
+                    password : '1234'
                 })
                 .expect(404)
                 .end(function(err , res){
