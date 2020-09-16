@@ -10,6 +10,7 @@ let adminToken;
 let nonAdminToken;
 let productId;
 let deleteProductId;
+let searchProdId;
 //below is variable for testing string longer than 255 (to test input longer than Varchar255 limit)
 let veryLongString = 'abcdef';
 //end of very long string initialization, actual string will be expanded to 256 length on beforeAll
@@ -72,6 +73,10 @@ describe('===TEST CASES===', () => {
         return Product.bulkCreate(starterData, {});
       })
       .then((data) => {
+        return Product.findOne({ where: { name: "string" } })
+      })
+      .then((data) => {
+        searchProdId = data.id;
         return Product.findOne({ where: { name: "iniYangDiEdit" } })
       })
       .then((data) => {
@@ -518,6 +523,40 @@ describe('===TEST CASES===', () => {
               done(err);
             } else {
               expect(res.status).toBe(200);
+              done();
+            }
+          })
+      })
+
+      test('Search by ID must return correct product.', (done) => {
+        request(app)
+          .get(`/products/${searchProdId}`)
+          .set('access_token', adminToken)
+          .end((err, res) => {
+            if (err) {
+              done(err);
+            } else {
+              expect(res.status).toBe(200);
+              expect(res.body).toHaveProperty('id', searchProdId);
+              expect(res.body).toHaveProperty('name', 'string');
+              expect(res.body).toHaveProperty('image_url', 'string');
+              expect(res.body).toHaveProperty('price', "2000");
+              expect(res.body).toHaveProperty('stock', 8);
+              done();
+            }
+          })
+      })
+
+      test('Expected search.', (done) => {
+        request(app)
+          .get(`/products/${searchProdId - 1}`)
+          .set('access_token', adminToken)
+          .end((err, res) => {
+            if (err) {
+              done(err);
+            } else {
+              expect(res.status).toBe(404);
+              expect(res.body).toHaveProperty('message', 'Not found.');
               done();
             }
           })

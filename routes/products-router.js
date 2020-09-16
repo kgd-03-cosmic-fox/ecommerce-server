@@ -7,6 +7,7 @@ const adminAuthorization = require("../middlewares/authorization.js");
 router.use(authenticateUser);
 router.post('/', adminAuthorization, ProductController.addProductPostHandler);
 router.get('/', ProductController.getProductListHandler);
+router.get('/:productId', adminAuthorization, ProductController.searchByIdGetHandler);
 router.put('/:productId', adminAuthorization, ProductController.updateProductPutHandler);
 router.delete('/:productId', adminAuthorization, ProductController.deleteProductHandler);
 

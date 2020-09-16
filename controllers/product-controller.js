@@ -56,6 +56,20 @@ class ProductController {
       })
   }
 
+  static searchByIdGetHandler(req, res, next) {
+    Product.findByPk(req.params.productId, {})
+      .then((data) => {
+        if (data === null) {
+          next({ message: "Not found." })
+        } else {
+          res.status(200).json(data);
+        }
+      })
+      .catch((err) => {
+        next(err);
+      })
+  }
+
 }
 
 module.exports = ProductController;
