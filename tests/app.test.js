@@ -1,4 +1,3 @@
-//require('dotenv').config();
 const request = require('supertest');
 const app = require('../app.js');
 const { Product, User } = require('../models/index.js');
@@ -16,20 +15,6 @@ let veryLongString = 'abcdef';
 //end of very long string initialization, actual string will be expanded to 256 length on beforeAll
 
 //below is the variable input from the test result which should appear
-let correctlyInsertedData = [
-  {
-    name: "string",
-    image_url: "string",
-    price: 2000,
-    stock: 8
-  },
-  {
-    name: "strang strong",
-    image_url: "strang streng",
-    price: 5000,
-    stock: 2
-  }
-];
 
 let starterData = [
   {
@@ -65,7 +50,19 @@ describe('===TEST CASES===', () => {
       veryLongString += "1234567890";
     }
 
-    User.findOne({ where: { email: "budi@mail.com" } })
+    User.bulkCreate([{
+      email: "budi@mail.com",
+      password: "asdasd",
+      role: 0
+    },
+    {
+      email: "admin@mail.com",
+      password: "1234",
+      role: 1
+    }], {})
+      .then((data) => {
+        return User.findOne({ where: { email: "budi@mail.com" } })
+      })
       .then((data) => {
         nonAdminToken = jwt.sign({ id: data.id, email: data.email, role: data.role }, JWT_SECRET_KEY)
         return User.findOne({ where: { email: "admin@mail.com" } })
@@ -93,6 +90,9 @@ describe('===TEST CASES===', () => {
 
   afterAll((done) => {
     Product.destroy({ where: {}, truncate: true })
+      .then((result) => {
+        return User.destroy({ where: {}, truncate: true });
+      })
       .then((result) => {
         done()
       })
@@ -196,9 +196,6 @@ describe('===TEST CASES===', () => {
               if (err) {
                 done(err);
               } else {
-                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-                console.log(res);
-                console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
                 expect(res.status).toBe(201);
                 expect(res.body.name).toBe('string');
                 expect(res.body.image_url).toBe('string');
@@ -527,11 +524,11 @@ describe('===TEST CASES===', () => {
       })
     })
 
-    describe('PATCH /products', () => {
+    describe('PUT /products', () => {
       describe('Correct outputs', () => {
         test('Update multiple columns correctly.', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "string",
@@ -553,7 +550,7 @@ describe('===TEST CASES===', () => {
       describe('Error Inputs', () => {
         test('Handles bad name input in update.', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "a",
@@ -574,7 +571,7 @@ describe('===TEST CASES===', () => {
 
         test('Handles bad price input in update.', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "string",
@@ -595,7 +592,7 @@ describe('===TEST CASES===', () => {
 
         test('Handles bad stock input in update.', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "string",
@@ -616,7 +613,7 @@ describe('===TEST CASES===', () => {
 
         test('Handles bad price input in update. (String input)', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "string",
@@ -637,7 +634,7 @@ describe('===TEST CASES===', () => {
 
         test('Handles bad stock input in update. (String input)', (done) => {
           request(app)
-            .patch(`/products/${productId}`)
+            .put(`/products/${productId}`)
             .set('access_token', adminToken)
             .send({
               name: "string",

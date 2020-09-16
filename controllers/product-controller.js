@@ -29,7 +29,7 @@ class ProductController {
       })
   }
 
-  static updateProductPatchHandler(req, res, next) {
+  static updateProductPutHandler(req, res, next) {
 
     Product.update({
       name: req.body.name,
