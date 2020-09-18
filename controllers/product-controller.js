@@ -4,9 +4,27 @@ class ProductController{
 
     static getProduct(req , res , next){
         
-        Product.findAll()
+        Product.findAll({
+            order: [['id' , 'ASC']]
+        })
         .then(data=>{
             res.status(200).json(data)
+        })
+        .catch(next)
+    }
+
+    static getProductById(req , res , next){
+        Product.findOne({
+            where: {
+                id : req.params.id
+            }
+        })
+        .then(data=>{
+            if(data){
+                res.status(200).json(data)
+            }else{
+                next({status: 404 , message: 'Data Not Found'})
+            }
         })
         .catch(next)
     }

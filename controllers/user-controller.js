@@ -22,7 +22,6 @@ class UserController{
     
                     if(checkPassword){
                         
-                        console.log(process.env.SECRET_KEY)
 
                         let access_token = jwt.sign({ id : data.id , email : data.email} , process.env.SECRET_KEY)
     

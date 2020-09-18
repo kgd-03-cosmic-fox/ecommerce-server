@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
           let imgExt = ['.png' , '.jpg' , '.jpeg']
 
           let baseUrl = ''
-          for(let i = 0 ; i < 8 ; i++){
+          for(let i = 0 ; i < 9 ; i++){
             baseUrl += value[i]
             for(let j = 0 ; j < http.length ; j++){
               if(baseUrl == http[j]){
@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
             endUrl += value[k]
             for(let l = 0 ; l < imgExt.length ; l++){
 
-              if(endUrl.split("").reverse().join("") == imgExt[l]){
+              if(endUrl.split("").reverse().join("").toLowerCase() == imgExt[l]){
                 flagEndUrl = true
               }
             }

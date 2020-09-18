@@ -80,7 +80,7 @@ describe('Product Router' , ()=>{
                 .post('/products')
                 .send({
                     name : 'Black T-Shirt',
-                    image_url : 'http://blackcloth.jpg',
+                    image_url : 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTVz6nwpjdd_p8dmhSJhjkQgzH6Gqv5Mm5SYuAKIxQE_mf-GMMfdzweZHlqA6HtglXnp32Sa74&usqp=CAc.JPG',
                     price : 100000,
                     stock : 3
                 })
