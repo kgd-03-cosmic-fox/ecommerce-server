@@ -4,6 +4,7 @@
   "description": "ecommerce-server",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "dev": "npx nodemon app.js",
     "test": "jest --runInBand --forceExit --verbose --detectOpenHandles"
   },
