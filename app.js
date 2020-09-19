@@ -10,8 +10,8 @@ app.use(cors())
 
 app.use(`/`, routerIndex)
 
-// app.listen(port,()=>{
-//     console.log(`App listening at port:${port}`)
-// })
+app.listen(port,()=>{
+    console.log(`App listening at port:${port}`)
+})
 
 module.exports = app
