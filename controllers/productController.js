@@ -34,8 +34,8 @@ class ProductController{
             if(data){
                 Product.update({
                     name: req.body.name,
-                    price: req.body.price,
-                    stock: req.body.stock,
+                    price: Number(req.body.price),
+                    stock: Number(req.body.stock),
                     category: req.body.category
                 },{
                     where:{
@@ -70,6 +70,20 @@ class ProductController{
         })
         .catch(err=>{
             next(err)
+        })
+    }
+    static getProductById (req,res,next){
+        Product.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then(product=>{
+            if(product){
+                res.status(200).json({
+                    product
+                })
+            }
         })
     }
     static deleteProduct(req,res,next){
