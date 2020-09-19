@@ -4,7 +4,7 @@ const ProductRouter = require('./products-router.js');
 
 const UserController = require('../controllers/user-controller.js');
 
-router.use('/products', ProductRouter);
 router.post('/login', UserController.loginPostHandler);
+router.use('/products', ProductRouter);
 
 module.exports = router;

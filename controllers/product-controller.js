@@ -30,7 +30,8 @@ class ProductController {
   }
 
   static updateProductPutHandler(req, res, next) {
-
+    console.log(req.body)
+    console.log(req.params.productId)
     Product.update({
       name: req.body.name,
       image_url: req.body.image_url,
