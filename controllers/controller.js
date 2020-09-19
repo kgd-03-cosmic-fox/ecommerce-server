@@ -1,7 +1,7 @@
 const {User} = require(`../models`)
 const bcrypt = require('bcryptjs')
 const jwt = require(`jsonwebtoken`)
-// require('dotenv').config()
+require('dotenv').config()
 
 class Controller{
     static postRegister(req,res,next){
@@ -47,7 +47,8 @@ class Controller{
                         const token = jwt.sign({name:data.name,email:data.email},process.env.JWT_SECRET_KEY)
                         res.status(201).json({
                             message:"Login Success",
-                            token
+                            token,
+                            name: data.name
                         })
                     }
                     else{
