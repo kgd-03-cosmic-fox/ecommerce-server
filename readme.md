@@ -1,27 +1,7 @@
 ecommerce-server
 
-Spesifikasi:
-Create Product
-Read Product
-Update Product
-Delete Product
+Client App for Content Management System (admin system) is deployed at: https://ecom-cms-client.web.app/
 
+API Docs: https://documenter.getpostman.com/view/12545012/TVKBYdeE
 
-Register (via seeding, do not need a feature)
-Login MUST be email+password, role: 'admin' via seeding
-
-table minimum:
-
-Products:
-name -> string
-image_url -> string
-price -> decimal
-stock -> integer
-
-Users:
-email -> string
-password -> string
-role -> string/integer? maybe integer is easier to work with and easier to expand later
-
-Roles:
-id -> integer -> nanti jadi FK di Users
+Seeded account -> email: admin@mail.com || password: 1234
