@@ -1,6 +1,6 @@
 const express = require(`express`)
 const app = express()
-const port = 3000
+// const port = 3000
 const routerIndex = require(`./router/index`)
 const cors = require(`cors`)
 
@@ -10,8 +10,8 @@ app.use(cors())
 
 app.use(`/`, routerIndex)
 
-app.listen(port,()=>{
-    console.log(`App listening at port:${port}`)
-})
+// app.listen(port,()=>{
+//     console.log(`App listening at port:${port}`)
+// })
 
 module.exports = app
