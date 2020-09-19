@@ -22,6 +22,7 @@
     "dotenv": "^8.2.0"
   },
   "scripts": {
+    "start" : "node app.js"
     "test": "jest --verbose --runInBand --detectOpenHandles --forceExit"
   },
   "repository": {
