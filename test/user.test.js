@@ -17,7 +17,7 @@ describe("User Routes",() =>{
             done(err)
           }
           else{
-            // expect(res.body.access_token).toBe(jwt.sign())
+            expect(res.body).toHaveProperty('access_token')
             expect(res.body.message).toBe('Login Success')
             done()
           }

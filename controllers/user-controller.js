@@ -43,14 +43,13 @@ class UserController{
       name:req.body.name,
       email:req.body.email,
       password:req.body.password,
-      jobDesk:req.body.jobDesk,
-      OrganisationId:req.body.OrganisationId
+      role:'user'
     })
     .then(data =>{
       res.status(201).json({
         msg:"Register Success",
         name: req.body.name,
-        password:req.body.password
+        role:'user'
       })
     })
     .catch(err =>{
