@@ -4,7 +4,8 @@
   "description": "ecommerce-server",
   "main": "app.js",
   "scripts": {
-    "test": "jest --verbose --runInBand --detectOpenHandles --forceExit"
+    "test": "jest --verbose --runInBand --detectOpenHandles --forceExit",
+    "start": "node ./http/index.js"
   },
   "repository": {
     "type": "git",
