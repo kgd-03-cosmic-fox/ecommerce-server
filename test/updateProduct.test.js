@@ -10,27 +10,36 @@ const {Product} = require(`../models`)
 let productUpdate = {
     name: "(Update) Shampo Clean 250ml",
     price: 20000,
-    stock: 25
+    stock: 25,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 
+//Tampung id
 let productId;
 
 //Product's object if name || price || stock isNull
 let productNameIsInteger = {
     name:45124, // tes error karena number
     price:15000,
-    stock: 50
+    stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 
 let productPriceIsString = {
     name:"Shampo Clean 250ml",
     price:"15000", // tes error karena string
-    stock: 50
+    stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 let productStockIsString = {
     name:"Shampo Clean 250ml",
     price:15000,
-    stock: "50" // test error karena string
+    stock: "50",// test error karena string
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 
 
@@ -79,7 +88,9 @@ describe("PUT Product /Product/:id",()=>{
             Product.create({
                 name:"Shampo Clean 250ml",
                 price: 15000,
-                stock: 50
+                stock: 50,
+                category: 'manual brewers',
+                imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
             })
             .then(data=>{
                 productId = data.id

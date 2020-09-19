@@ -1,0 +1,156 @@
+[
+  {
+    "name":"A-IDIO - Diamond Coffee Dripper (Rose Gold)",
+    "price":675000,
+    "stock":50,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f2a60bfa1244661196685.jpg"
+  },
+  {
+    "name":"A-IDIO - Drip Coffee Kettle 240ml (Rose Gold)",
+    "price":585000,
+    "stock":70,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5bcd757922710096048588.jpg"
+  },
+  {
+    "name":"A-IDIO - Drip Coffee Kettle 240ml Macaron Series (Brown)",
+    "price":525000,
+    "stock":70,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f2a570123f59990590156.jpg"
+  },
+  {
+    "name":"Acaia - Lunar Base",
+    "price":745000,
+    "stock":70,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/581084a61b137.jpg"
+  },
+  {
+    "name":"Aerolatte French Press 8 Cups",
+    "price":345000,
+    "stock":35,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/58390b851420f.jpg"
+  },
+  {
+    "name":"Aerolatte Paper Filter 4 Cups",
+    "price":65000,
+    "stock":35,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5a0551270fe0e492057151.jpg"
+  },
+  {
+    "name":"Beanplus - Cold Brew Coffee Maker (CS350)",
+    "price":895000,
+    "stock":35,
+    "category":"manual-brewers",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5e7da487b2396212667865.jpg"
+  },
+  {
+    "name":"Bundle Delonghi Free Coffee 6 bulan - Espresso Machine ECP 31.21",
+    "price":4455500,
+    "stock":35,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f351cdbafd36786959324.jpg"
+  },
+  {
+    "name": "Baratza - Encore Black",
+    "price":2950000,
+    "stock":35,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5ed20580bb89e553270752.jpg"
+  },
+  {
+    "name": "Breville - The Oracle Espresso BES980",
+    "price":3990000,
+    "stock":35,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f3ba5d849d04546579269.jpg"
+  },
+  {
+    "name": "Breville - The Oracle Touch BES990BSS",
+    "price":4990000,
+    "stock":35,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f4884f58906d999195643.jpg"
+  },
+  {
+    "name": "Breville Dual Boiler BES920 + Smart Grinder Pro BCG820BSS",
+    "price":30210000,
+    "stock":35,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/594a391ed9f1b793281207.jpg"
+  },
+  {
+    "name": "Bundle Delonghi Free Coffee 12 bulan - Magnifica ECAM 250.31.SB",
+    "price":15950000,
+    "stock":12,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f351b14217c5854656107.jpg"
+  },
+  {
+    "name": "Bundle Delonghi Free Coffee 12 bulan - La Specialista EC9335.M",
+    "price":15550000,
+    "stock":12,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f351ab62018c162468220.jpg"
+  },
+  {
+    "name": "Bundle Delonghi Free Coffee 6 bulan - Combi BCO421.S",
+    "price":6100000,
+    "stock":12,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f351bfb8686e761928105.jpg"
+  },
+  {
+    "name": "Bundle Delonghi Free Coffee 6 bulan - Dedica Style EC 685.R",
+    "price":5896000,
+    "stock":12,
+    "category":"coffee-machines",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5f351c6ed8f4a044756545.jpg"
+  },
+  {
+    "name": "Kopi Arabica Toraja Sapan - 1 Kg",
+    "price":200000,
+    "stock":58,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/56499863a30f9.jpg"
+  },
+  {
+    "name": "Kopi Arabica Mandheling - 1 Kg",
+    "price":145000,
+    "stock":145000,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5a4b358f709e3309902054.jpg"
+  },
+  {
+    "name": "Kopi Arabica Sidikalang - 1 Kg",
+    "price":145000,
+    "stock":62,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/581ada03bd023.jpg"
+  },
+  {
+    "name": "Kopi Arabica Ethiopia Sidamo - 1 Kg",
+    "price": 275000,
+    "stock":13,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/56aaec94b08d1.jpg"
+  },
+  {
+    "name": "Green Bean Kopi Arabica Tirtoyudo - 1 Kg",
+    "price":150000,
+    "stock":45,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/5ba1c81778e63591632082.jpg"
+  },
+  {
+    "name": "Green Bean Kopi Arabica Bali Kintamani - 1 Kg",
+    "price":160000,
+    "stock":32,
+    "category":"coffees",
+    "imgUrl": "https://s-ecom.ottenstatic.com/original/564999fa9b7d8.jpg"
+  }
+]

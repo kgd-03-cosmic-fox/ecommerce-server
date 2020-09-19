@@ -6,33 +6,8 @@ require('dotenv').config()
 const {Product} = require(`../models`)
 
 
-//Object for updating product
-let productUpdate = {
-    name: "(Update) Shampo Clean 250ml",
-    price: 20000,
-    stock: 25
-}
-
+//Tampung id
 let productId;
-
-//Product's object if name || price || stock isNull
-let productNameIsInteger = {
-    name:45124, // tes error karena number
-    price:15000,
-    stock: 50
-}
-
-let productPriceIsString = {
-    name:"Shampo Clean 250ml",
-    price:"15000", // tes error karena string
-    stock: 50
-}
-let productStockIsString = {
-    name:"Shampo Clean 250ml",
-    price:15000,
-    stock: "50" // test error karena string
-}
-
 
 //Object for logging-, isAdmin = true
 let userLogin = {
@@ -79,7 +54,9 @@ describe("Delete Product /Product/:id",()=>{
             Product.create({
                 name:"Shampo Clean 250ml",
                 price: 15000,
-                stock: 50
+                stock: 50,
+                category: 'manual brewers',
+                imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
             })
             .then(data=>{
                 productId = data.id

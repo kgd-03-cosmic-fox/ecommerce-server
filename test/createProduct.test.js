@@ -10,24 +10,32 @@ const {Product} = require(`../models`)
 let productInput = {
     name:"Shampo Clean 250ml",
     price: 15000,
-    stock: 50
+    stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 
 //Product's object if name || price || stock isNull
 let productNameIsEmpty = {
     // name:"Shampo Clean 250ml",
     price:15000,
-    stock: 50
+    stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 let productPriceIsEmpty = {
     name:"Shampo Clean 250ml",
     // price:15000,
-    stock: 50
+    stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 let productStockIsEmpty = {
     name:"Shampo Clean 250ml",
     price:15000,
-    // stock: 50
+    // stock: 50,
+    category: 'manual brewers',
+    imgUrl: "https://s-ecom.ottenstatic.com/original/5d0c942d8db21860973491.jpg"
 }
 
 
@@ -103,7 +111,7 @@ describe("POST Product /Product",()=>{
                 done()
             })
         })
-        test("Error because access_token is not verified",(done)=>{
+        test("Error because access_token is not Admin",(done)=>{
             request(app)
             .post(`/product`)
             .set("access_token", dummyIsNotAdmin)
@@ -154,10 +162,8 @@ describe("POST Product /Product",()=>{
                 done()
             })
         })
-
-        let priceIsMinus = {...productInput,price:-15000}
-
         test("Error because of PRICE input is minus",(done)=>{
+        let priceIsMinus = {...productInput,price:-15000}
             request(app)
             .post("/product")
             .set("access_token",dummyAccessToken)
@@ -169,11 +175,9 @@ describe("POST Product /Product",()=>{
                 expect(res.body.errors[0]).toBe("Price can't be under 0")
                 done()
             })
-        })
-
-        let stockIsMinus = {...productInput,stock:-50}
-        
+        })        
         test("Error because of Stock input is minus",(done)=>{
+        let stockIsMinus = {...productInput,stock:-50}
             request(app)
             .post("/product")
             .set("access_token",dummyAccessToken)

@@ -1,12 +1,14 @@
 const {User} = require(`../models`)
 const bcrypt = require('bcryptjs')
 const jwt = require(`jsonwebtoken`)
+require('dotenv').config()
 
 class Controller{
     static postRegister(req,res,next){
         User.create({
             name: req.body.name,
             email:req.body.email,
+            isAdmin:false,
             password:req.body.password
         })
         .then(user=>{
@@ -22,7 +24,7 @@ class Controller{
             })
         })
     }
-    static postLogin(req,res){
+    static postLogin(req,res){//diganti yah jangan disini validasinya
         if(!req.body.email){
             res.status(400).json({
                 message:"email can't be null"
@@ -42,7 +44,7 @@ class Controller{
             .then(data=>{
                 if(data){
                     if(bcrypt.compareSync(req.body.password,data.password)){
-                        const token = jwt.sign({name:data.name,email:data.email},"secret")
+                        const token = jwt.sign({name:data.name,email:data.email},process.env.JWT_SECRET_KEY)
                         res.status(201).json({
                             message:"Login Success",
                             token

@@ -1,13 +1,14 @@
 const {Product} = require(`../models`)
-const product = require("../models/product")
 
 
 class ProductController{
     static postNewProduct(req,res,next){
         Product.create({
             name: req.body.name,
-            price: req.body.price,
-            stock: req.body.stock
+            price: Number(req.body.price),
+            stock: Number(req.body.stock),
+            category: req.body.category,
+            imgUrl: req.body.imgUrl
         })
         .then(product=>{
             res.status(201).json({
@@ -15,7 +16,8 @@ class ProductController{
                 id:product.id,
                 name:product.name,
                 price:product.price,
-                stock:product.stock
+                stock:product.stock,
+                category:product.category
             })
         })
         .catch(err=>{
@@ -33,7 +35,8 @@ class ProductController{
                 Product.update({
                     name: req.body.name,
                     price: req.body.price,
-                    stock: req.body.stock
+                    stock: req.body.stock,
+                    category: req.body.category
                 },{
                     where:{
                         id:req.params.id
@@ -58,6 +61,17 @@ class ProductController{
             next(err)
         })
     }
+    static getAllProduct(req,res,next) {
+        Product.findAll()
+        .then(products=>{
+            res.status(200).json({
+                products
+            })
+        })
+        .catch(err=>{
+            next(err)
+        })
+    }
     static deleteProduct(req,res,next){
         Product.findOne({
             where:{
@@ -72,7 +86,6 @@ class ProductController{
                     }
                 })
                 .then(_=>{
-                    console.log("ini dari IF")
                     res.status(201).json({
                         message: "Success deleting product"
                     })
@@ -82,7 +95,6 @@ class ProductController{
                 })
             }
             else{
-                console.log("ini dari ELSE")
                 res.send(404).json({
                     message:"Not found Error 404"
                 })

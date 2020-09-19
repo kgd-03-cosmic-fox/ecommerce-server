@@ -4,6 +4,7 @@ const {User} = require(`../models/index`)
 const bcrypt = require('bcryptjs')
 
 const salt = bcrypt.genSaltSync(10);
+
 //Input for register
 const userData={
     name: "Rafael",
@@ -33,7 +34,12 @@ describe("User Register && Login Test",()=>{
     })
     beforeAll((done)=>{
         User.create(userData)
-        done()
+        .then(_=>{
+            done()
+        })
+        .catch(_=>{
+            done(err)
+        })
     })
     // describe("TEST REGISTER /register",()=>{
     //     describe('Register (SUCCESS)', ()=>{
@@ -69,8 +75,8 @@ describe("User Register && Login Test",()=>{
             })
         })
         describe("LOGIN (ERROR Case)",()=>{
-            let wrongUserPassword = {...userLogin,password:"this is wrong password"}
             test("Failed because of wrong password",(done)=>{
+							let wrongUserPassword = {...userLogin,password:"this is wrong password"}
                 request(app)
                 .post('/login')
                 .send(wrongUserPassword)
@@ -81,8 +87,8 @@ describe("User Register && Login Test",()=>{
                     done()
                 })
             })
-            let unregisteredEmail = {...userLogin,email:"unergisteredEmail@gmail.com"}
             test("Failed because of unregistered email account",(done)=>{
+							let unregisteredEmail = {...userLogin,email:"unergisteredEmail@gmail.com"}
                 request(app)
                 .post(`/login`)
                 .send(unregisteredEmail)
@@ -93,8 +99,8 @@ describe("User Register && Login Test",()=>{
                     done()
                 })
             })
-            let emailIsNull = {...userLogin,email:null}
             test("Failed because email is null",(done)=>{
+							let emailIsNull = {...userLogin,email:null}
                 request(app)
                 .post(`/login`)
                 .send(emailIsNull)
