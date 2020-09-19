@@ -1,6 +1,12 @@
+if(process.env.NODE_ENV == "development"){
+    require('dotenv').config()
+  }
+
+//   require('dotenv').config() // Matiin saat ingin deploy
+
 const express = require(`express`)
 const app = express()
-// const port = 3000
+const port = process.env.PORT
 const routerIndex = require(`./router/index`)
 const cors = require(`cors`)
 
