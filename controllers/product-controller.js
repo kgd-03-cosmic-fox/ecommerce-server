@@ -30,7 +30,6 @@ class ProductController{
   static putProduct(req,res,next){
     Product.update({
       name:req.body.name,
-      image_url:req.body.image_url,
       price:Number(req.body.price),
       stock:Number(req.body.stock)
     }

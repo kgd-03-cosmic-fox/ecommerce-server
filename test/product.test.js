@@ -62,7 +62,7 @@ describe("Product Routes", () =>{
     describe("Success when adding products",() =>{
       test("adding item with correct token",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -85,7 +85,7 @@ describe("Product Routes", () =>{
     describe("Error while adding products",() =>{
       test("when adding item with null url value",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:"sneakers",
           image_url:'',
@@ -106,7 +106,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with null item name",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:'',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -127,7 +127,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with minus price value",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:"sneakers",
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -148,7 +148,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with minus stock value",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:"sneakers",
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -169,7 +169,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with different DataTypes of name",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:94352,
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -190,7 +190,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with different DataTypes of price",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -211,7 +211,7 @@ describe("Product Routes", () =>{
       })
       test("adding item with different DataTypes of stock",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -232,7 +232,7 @@ describe("Product Routes", () =>{
       })
       test("adding item without access_token",(done) =>{
         request(app)
-        .post('/products')
+        .post('/items')
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -256,7 +256,7 @@ describe("Product Routes", () =>{
     describe("when success editing Data",()=>{
       test("success updating data",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'sepatu',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -279,7 +279,7 @@ describe("Product Routes", () =>{
     describe("when Fail editing data",()=>{
       test("Fail updating data cz access_token = null",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'sepatu',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -299,7 +299,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating data cz access_token = not admin",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'sepatu',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -320,7 +320,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating data cz image_url null",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:"sneakers",
           image_url:'',
@@ -341,7 +341,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating data cz null value of name",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -362,7 +362,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating data cz negative value of price",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'Sepatu',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -383,7 +383,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating data cz negative value of stock",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'Sepatu',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -404,7 +404,7 @@ describe("Product Routes", () =>{
       })
       test("Fail updating item with not string value",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:94352,
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -425,7 +425,7 @@ describe("Product Routes", () =>{
       })
       test("Fail update : price = string",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -446,7 +446,7 @@ describe("Product Routes", () =>{
       })
       test("Fail update : stock = string",(done) =>{
         request(app)
-        .put(`/products/${dummyProductId}`)
+        .put(`/items/${dummyProductId}`)
         .send({
           name:'sneakers',
           image_url:'https://images-na.ssl-images-amazon.com/images/I/61xF2IjNvZL._UY500_.jpg',
@@ -471,7 +471,7 @@ describe("Product Routes", () =>{
     describe("when success deleting product",() =>{
       test("when success delete product",(done) =>{
         request(app)
-        .delete(`/products/${dummyProductId}`)
+        .delete(`/items/${dummyProductId}`)
         .expect(200)
         .set('access_token',admToken)
         .end(function(err,res){
@@ -488,7 +488,7 @@ describe("Product Routes", () =>{
     describe("When Fail Deleting Product",() =>{
       test("when Fail delete product without access_token",(done) =>{
         request(app)
-        .delete(`/products/${dummyProductId}`)
+        .delete(`/items/${dummyProductId}`)
         .expect(401)
         .end(function(err,res){
           if(err){
@@ -502,7 +502,7 @@ describe("Product Routes", () =>{
       })
       test("when Fail delete product with user access_token",(done) =>{
         request(app)
-        .delete(`/products/${dummyProductId}`)
+        .delete(`/items/${dummyProductId}`)
         .set('access_token',nonAdmToken)
         .expect(401)
         .end(function(err,res){
