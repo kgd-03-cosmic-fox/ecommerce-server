@@ -29,24 +29,24 @@ class ProductController{
   }
   static putProduct(req,res,next){
     Product.update({
-      name:req.body.name,
-      price:Number(req.body.price),
-      stock:Number(req.body.stock)
-    }
-  ,{
-    where:{
-      id:req.params.id
-    }
-  })
-    .then(data =>{
-      res.status(201).json({
-        message:'Data has been updated'
+        name:req.body.name,
+        price:Number(req.body.price),
+        stock:Number(req.body.stock)
+      }
+    ,{
+      where:{
+        id:req.params.id
+      }
+    })
+      .then(data =>{
+        res.status(201).json({
+          message:'Data has been updated'
+        })
       })
-    })
-    .catch(err =>{
-      next(err)
-      console.log(err)
-    })
+      .catch(err =>{
+        next(err)
+        console.log(err)
+      })
   }
   static deleteProduct(req,res,next){
     Product.destroy({

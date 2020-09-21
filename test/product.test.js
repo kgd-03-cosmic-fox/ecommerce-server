@@ -277,7 +277,7 @@ describe("Product Routes", () =>{
       })
     })
     describe("when Fail editing data",()=>{
-      test("Fail updating data cz access_token = null",(done) =>{
+      test("Fail updating data cause access_token = null",(done) =>{
         request(app)
         .put(`/items/${dummyProductId}`)
         .send({
@@ -297,7 +297,7 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test("Fail updating data cz access_token = not admin",(done) =>{
+      test("Fail updating data cause access_token = not admin",(done) =>{
         request(app)
         .put(`/items/${dummyProductId}`)
         .send({
@@ -318,28 +318,7 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test("Fail updating data cz image_url null",(done) =>{
-        request(app)
-        .put(`/items/${dummyProductId}`)
-        .send({
-          name:"sneakers",
-          image_url:'',
-          price:300000,
-          stock:5
-        })
-        .set('access_token',admToken)
-        .expect(400)
-        .end(function(err,res){
-          if(err){
-            done(err)
-          }
-          else{
-            expect(res.body.message).toBe('Url Cannot be leave empty')
-            done()
-          }
-        })
-      })
-      test("Fail updating data cz null value of name",(done) =>{
+      test("Fail updating data cause null value of name",(done) =>{
         request(app)
         .put(`/items/${dummyProductId}`)
         .send({
@@ -360,7 +339,7 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test("Fail updating data cz negative value of price",(done) =>{
+      test("Fail updating data cause negative value of price",(done) =>{
         request(app)
         .put(`/items/${dummyProductId}`)
         .send({
@@ -381,7 +360,7 @@ describe("Product Routes", () =>{
           }
         })
       })
-      test("Fail updating data cz negative value of stock",(done) =>{
+      test("Fail updating data cause negative value of stock",(done) =>{
         request(app)
         .put(`/items/${dummyProductId}`)
         .send({
