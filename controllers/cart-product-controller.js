@@ -22,6 +22,29 @@ class CartProductController {
       next(err)
     })
   }
+  static getCartProductById (req,res,next) {
+    Cart.findOne({
+      where: {
+        UserId: req.loggedInUser.id
+      }
+    })
+    .then(cart => {
+      CartProduct.findOne({
+          where: {
+            id: req.params.id,
+            CartId: cart.id
+          },
+          include: Product
+        })
+        .then(data =>{
+          res.status(200).json(data)
+        })
+    })
+    .catch(err =>{
+      console.log(err)
+      next(err)
+    })
+  }
   static postCartProduct (req,res,next) {
     Cart.findOne({
       where: {
