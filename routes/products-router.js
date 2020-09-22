@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 const ProductController = require('../controllers/product-controller.js');
 const authenticateUser = require("../middlewares/authentication.js");
-const adminAuthorization = require("../middlewares/authorization.js");
+const adminAuthorization = require("../middlewares/admin-authorization.js");
 
 router.use(authenticateUser);
 router.post('/', adminAuthorization, ProductController.addProductPostHandler);
 router.get('/', ProductController.getProductListHandler);
-router.get('/:productId', adminAuthorization, ProductController.searchByIdGetHandler);
+router.get('/:productId', ProductController.searchByIdGetHandler);
 router.put('/:productId', adminAuthorization, ProductController.updateProductPutHandler);
 router.delete('/:productId', adminAuthorization, ProductController.deleteProductHandler);
 
