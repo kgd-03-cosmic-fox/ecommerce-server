@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User,Cart } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 class UserController{
@@ -45,11 +45,18 @@ class UserController{
       password:req.body.password,
       role:'user'
     })
-    .then(data =>{
-      res.status(201).json({
-        msg:"Register Success",
-        name: req.body.name,
-        role:'user'
+    .then(user =>{
+      return Cart.create({
+        UserId: user.id
+      })
+      .then(data => {
+        res.status(201).json({
+          msg:"Register Success",
+          name: req.body.name,
+        })
+      })
+      .catch(err => {
+        res.send(500).json(err)
       })
     })
     .catch(err =>{
