@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { Product , Transaction } = require('../models')
 
 class ProductController{
 
