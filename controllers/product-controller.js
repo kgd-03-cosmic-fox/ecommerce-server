@@ -44,7 +44,6 @@ class ProductController {
       .catch((err) => {
         next(err);
       })
-
   }
 
   static deleteProductHandler(req, res, next) {

@@ -14,10 +14,10 @@ module.exports = {
       ProductId: {
         type: Sequelize.INTEGER
       },
-      Amount: {
+      amount: {
         type: Sequelize.INTEGER
       },
-      Status: {
+      status: {
         type: Sequelize.INTEGER
       },
       createdAt: {

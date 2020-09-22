@@ -7,7 +7,7 @@ function authenticateUser(req, res, next) {
       res.status(401).json({ message: "Unauthorized." });
     } else {
       req.tokenPayload = jwt.verify(req.headers.access_token, process.env.JWT_SECRET_KEY);
-      User.findByPk(req.tokenPayload.id)
+      User.findByPk(req.tokenPayload.id, {})
         .then((data) => {
           if (data !== null) {
             next();
