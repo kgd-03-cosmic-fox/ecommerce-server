@@ -15,10 +15,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   CartProduct.init({
-    CartId: DataTypes.INTEGER,
+    ShoppingCartId: DataTypes.INTEGER,
     ProductId: DataTypes.INTEGER,
-    amount: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    amount: {
+      type: DataTypes.INTEGER, allowNull: false,
+      validate: {
+        notNull: { args: true, msg: `Invalid amount.` },
+        isInt: { args: true, msg: `Invalid amount.` },
+        min: { args: [1], msg: `Invalid amount.` }
+      }
+    },
+    status: {
+      type: DataTypes.INTEGER, allowNull: false,
+      validate: {
+        notNull: { args: true, msg: `Invalid Status.` }
+      }
+    }
   }, {
     sequelize,
     modelName: 'CartProduct',

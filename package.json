@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --verbose --runInBand --detectOpenHandles --forceExit",
+    "dev": "npx nodemon ./http/server.js",
     "start": "node ./http/server.js"
   },
   "repository": {

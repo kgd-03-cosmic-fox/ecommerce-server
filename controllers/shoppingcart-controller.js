@@ -12,6 +12,9 @@ class ShoppingCartController {
       attributes: { exclude: ['createdAt', 'updatedAt'] }, //get card ID associated with the user
       include: [{
         model: CartProduct, where: { status: 0 }, //status 0 = unprocessed, status 1 = purchased
+        attributes: { include: ['id'] }, //ducttape fix lul.
+        //somehow sequelize thinks ShoppingCartId is the PK and acts like id didnt exist when not specifying.
+        //actual PK is still the id, it's just the fetch queries seems to didnt think so.
         include: [{
           model: Product,
           attributes: { exclude: ['createdAt', 'updatedAt'] }
@@ -26,22 +29,59 @@ class ShoppingCartController {
       })
   }
 
-  static addToCartPostHandler(req, res, next) {  // params: ProductId ; add ProductId item to CartProduct
+  static async addToCartPostHandler(req, res, next) {
+    try {
+      let cartInfo = await ShoppingCart.findOne({ where: { UserId: req.tokenPayload.id } });
+      if (cartInfo === null) {
+        cartInfo = await ShoppingCartController.generateShoppingCart(req.tokenPayload);
+      }
 
+      let currentItem = await Product.findOne({ where: { id: req.params.productId } })
+      if (req.body.amount > currentItem.stock) {
+        req.body.amount = currentItem.stock; //change amount to equal current stock if amount is bigger
+      }
+
+      let dupecheck = await CartProduct.findOne({
+        attributes: { include: ['id', 'amount'] },
+        where: { ShoppingCartId: cartInfo.id, ProductId: Number(req.params.productId), status: 0 }
+      });
+
+      if (dupecheck === null) {
+        let data = await CartProduct.create({
+          ShoppingCartId: cartInfo.id,
+          ProductId: req.params.productId,
+          amount: Number(req.body.amount),
+          status: 0
+        })
+        res.status(200).json(data);
+      }
+      else {
+        let data = await CartProduct.update({
+          amount: Number(req.body.amount)
+        }, { where: { id: dupecheck.id } })
+        res.status(200).json({ message: `Successfully updated the cart!` });
+      }
+
+    } catch (err) {
+      console.log(err)
+      next(err)
+    }
   }
 
   static editCartItemQuantityPatchHandler(req, res, next) { //params: cartProductId, 
+    req.body.amount = Number(req.body.amount)
     CartProduct.findByPk(req.params.cartProductId, { include: Product })
       .then((data) => {
         if (req.body.amount > data.Product.stock) { //if amount is bigger than stock, make amount same as stock
-          req.body.amount = data.Product.stock;   //still undecided whether doing this or throw err
+          return CartProduct.update({ amount: data.Product.stock },
+            { where: { id: req.params.cartProductId } })
         } else {
-          return CartProduct.update({ Amount: req.body.amount }, //requires req.body.amount type of Integer
+          return CartProduct.update({ amount: req.body.amount },
             { where: { id: req.params.cartProductId } })
         }
       })
       .then((data) => {
-        res.status(200).json({ message: "Update Successful!" })
+        res.status(200).json({ message: `Successfully updated the cart!` });
       })
       .catch((err) => {
         next(err);
@@ -49,7 +89,7 @@ class ShoppingCartController {
   }
 
   static removeFromCartDeleteHandler(req, res, next) { //params: cartProductId for now
-    CartProduct.findByPk(req.params.cartProductId, {})
+    CartProduct.destroy({ where: { id: req.params.cartProductId } })
       .then((result) => {
         res.status(200).json({ message: "Delete successful." });
       })
