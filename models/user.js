@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require(`bcryptjs`)
+
 const {
   Model
 } = require('sequelize');
@@ -15,7 +17,24 @@ module.exports = (sequelize, DataTypes) => {
   };
   User.init({
     name:DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: 'Email is already exist'
+      },
+      validate: {
+        notEmpty:{
+          msg: 'Enter your email to register',
+        },
+        notNull: {
+          msg: 'Enter your email to register'
+        },
+        isEmail: {
+          msg: 'Invalid email format'
+        }
+      }
+    },
     isAdmin: {
       type:DataTypes.BOOLEAN,
       allowNull:false
@@ -25,5 +44,13 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
+  User.beforeCreate((userInstance)=>{
+    const salt = bcrypt.genSaltSync(10);
+    userInstance.password = bcrypt.hashSync(userInstance.password, salt);
+
+    userInstance.isAdmin = false
+
+  })
   return User;
 };

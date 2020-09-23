@@ -1,5 +1,5 @@
 const jwt = require(`jsonwebtoken`)
-// require('dotenv').config()
+const { User } = require(`../models`)
 
 function authentication(req,res,next){
 
@@ -11,11 +11,32 @@ function authentication(req,res,next){
     else{
         try{
             const payload = jwt.verify(req.headers.access_token,process.env.JWT_SECRET_KEY)
-            req.loggedInUser = payload
-            next()
+            User.findOne({
+                where:{
+                    id: payload.id
+                }
+            })
+            .then(user=>{
+                if(user){
+                    req.loggedInUser = payload
+                    next()
+                }
+                else{
+                    res.status(401).json({
+                        message: "Failed to authenticate"
+                    })
+                }
+            })
+            .catch(_=>{
+                res.status(401).json({
+                    err:"Failed to authenticate"
+                })
+            })
         }
         catch(err){
-            console.log(err)
+            res.status(401).json({
+                err:"Failed to authenticate"
+            })
         }
     }
 }

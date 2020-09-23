@@ -1,7 +1,7 @@
-const {User} = require(`../models`)
+const {User, Cart} = require(`../models`)
 const bcrypt = require('bcryptjs')
 const jwt = require(`jsonwebtoken`)
-// require('dotenv').config()
+require('dotenv').config()
 
 class Controller{
     static postRegister(req,res,next){
@@ -12,19 +12,25 @@ class Controller{
             password:req.body.password
         })
         .then(user=>{
-            res.status(201).json({
-                message:`Hi ${user.name}, your account is successfully registered`,
-                id:user.id,
-                email:user.email
+            return Cart.create({
+                UserId: user.id
+            })
+            .then(_=>{
+                res.status(201).json({
+                    message:`Hi ${user.name}, your account is successfully registered`,
+                    id:user.id,
+                    email:user.email
+                })
+            })
+            .catch(err=>{
+                next(err)
             })
         })
         .catch(err=>{
-            res.status(500).json({
-                err:"Internal server error"
-            })
+            next(err)
         })
     }
-    static postLogin(req,res){//diganti yah jangan disini validasinya
+    static postLogin(req,res) { //diganti yah jangan disini validasinya
         if(!req.body.email){
             res.status(400).json({
                 message:"email can't be null"
@@ -44,7 +50,13 @@ class Controller{
             .then(data=>{
                 if(data){
                     if(bcrypt.compareSync(req.body.password,data.password)){
-                        const token = jwt.sign({name:data.name,email:data.email},process.env.JWT_SECRET_KEY)
+                        const token = jwt.sign({
+                            id:data.id,
+                            name:data.name,
+                            email:data.email,
+                            isAdmin:data.isAdmin
+                        },process.env.JWT_SECRET_KEY)
+
                         res.status(201).json({
                             message:"Login Success",
                             token,

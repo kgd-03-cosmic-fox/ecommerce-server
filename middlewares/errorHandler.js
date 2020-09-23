@@ -8,6 +8,12 @@ function errorHandler(err,req,res,next){
             })
             statusCode = 400 
             break;
+        case "SequelizeUniqueConstraintError":
+            err.errors.forEach((el)=>{
+                errors.push(el.message)
+            })
+            statusCode = 400 
+            break;
         default:
             errors.push(err.message || "Internal server error")
             break;

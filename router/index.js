@@ -1,21 +1,9 @@
 const express = require(`express`)
 const router = express.Router()
-const Controller = require(`../controllers/controller`)
-const productRouter = require(`./productRouter`)
-const categoryRoter = require(`./categoryRouter`)
-const authentication = require(`../middlewares/authentication`)
-const authorization = require("../middlewares/authorization")
-const errorHandler = require("../middlewares/errorHandler")
+const adminRouter = require('./adminRouter.js')
+const customerRouter = require('./customerRouter.js')
 
+router.use('/admin', adminRouter)
+router.use('/customer', customerRouter)
 
-router.post(`/register`,Controller.postRegister)
-router.post(`/login`,Controller.postLogin)
-
-router.use(authentication) //Middleware Authentication
-router.use(authorization) //Middleware Authorization
-router.use(`/product`,productRouter)
-router.use('/category/', categoryRoter )
-
-
-router.use(errorHandler)//Middleware Error Handler
 module.exports = router

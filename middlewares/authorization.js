@@ -1,12 +1,11 @@
 function authorization(req,res,next){
-    if(req.loggedInUser.isAdmin==false){
+    if(req.loggedInUser.isAdmin == true){
+        next()
+    }
+    else{
         res.status(401).json({
             err: "Unauthorized"
         })
-    }
-    else{
-        next()
-
     }
 }
 
