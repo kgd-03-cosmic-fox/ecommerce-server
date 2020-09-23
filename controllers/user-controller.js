@@ -47,10 +47,6 @@ class UserController{
         
     }
 
-    static loginCust (req, res, next){
-        // kayaknya bisa pake login yang sama?
-    }
-
     static register (req, res, next) {
 
         User.create({
