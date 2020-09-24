@@ -31,22 +31,23 @@ class ShoppingCartController {
 
   static async addToCartPostHandler(req, res, next) {
     try {
+      req.body.amount = Number(req.body.amount)
       let cartInfo = await ShoppingCart.findOne({ where: { UserId: req.tokenPayload.id } });
       if (cartInfo === null) {
         cartInfo = await ShoppingCartController.generateShoppingCart(req.tokenPayload);
-      }
-
-      let currentItem = await Product.findOne({ where: { id: req.params.productId } })
-      if (req.body.amount > currentItem.stock) {
-        req.body.amount = currentItem.stock; //change amount to equal current stock if amount is bigger
       }
 
       let dupecheck = await CartProduct.findOne({
         attributes: { include: ['id', 'amount'] },
         where: { ShoppingCartId: cartInfo.id, ProductId: Number(req.params.productId), status: 0 }
       });
+      
+      let currentItem = await Product.findOne({ where: { id: req.params.productId } })
 
       if (dupecheck === null) {
+        if (req.body.amount > currentItem.stock) {
+          req.body.amount = currentItem.stock; //change amount to equal current stock if amount is bigger
+        }
         let data = await CartProduct.create({
           ShoppingCartId: cartInfo.id,
           ProductId: req.params.productId,
@@ -56,6 +57,10 @@ class ShoppingCartController {
         res.status(200).json(data);
       }
       else {
+        req.body.amount += dupecheck.amount;
+        if (req.body.amount > currentItem.stock) {
+          req.body.amount = currentItem.stock; //change amount to equal current stock if amount is bigger
+        }
         let data = await CartProduct.update({
           amount: Number(req.body.amount)
         }, { where: { id: dupecheck.id } })
@@ -70,7 +75,7 @@ class ShoppingCartController {
 
   static editCartItemQuantityPatchHandler(req, res, next) { //params: cartProductId, 
     req.body.amount = Number(req.body.amount)
-    CartProduct.findByPk(req.params.cartProductId, { include: Product })
+    CartProduct.findOne({ where: { id: req.params.cartProductId }, include: Product })
       .then((data) => {
         if (req.body.amount > data.Product.stock) { //if amount is bigger than stock, make amount same as stock
           return CartProduct.update({ amount: data.Product.stock },
