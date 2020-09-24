@@ -1,4 +1,4 @@
-const {Cart, UserCart, Product, Transaction} = require('../models')
+const {Cart, ProductCart, Product, Transaction} = require('../models')
 
 
 class CartController {
@@ -11,11 +11,12 @@ class CartController {
       }
     })
     .then(data => {
-      return UserCart.findAll({
+      return ProductCart.findAll({
         where : {
           CartId : data.id
         },
-        include: Product
+        include: Product,
+        attributes: ['id' , 'CartId' , 'ProductId', 'amount']
       })
     })
     .then(data => {
@@ -49,14 +50,11 @@ class CartController {
         stockProd = data.stock
         if(req.body.amount <= stockProd) {
 
-          return UserCart.findOne({
+          return ProductCart.findOne({
             where: {
               CartId : cartId,
               ProductId : prodId
-            },
-            // include {
-            //   product
-            // }
+            }
           })
           .then(data => {
 
@@ -64,7 +62,7 @@ class CartController {
               totalAmount = Number(req.body.amount) + data.amount
               
               if( totalAmount <= stockProd) {
-                return UserCart.update({
+                return ProductCart.update({
                   amount: totalAmount
                 },{
                   where: {
@@ -76,10 +74,9 @@ class CartController {
                 next({status: 400, message: 'Sorry, Quota Not Enough'})
               }
              
-
             } else {
               totalAmount = req.body.amount
-              return UserCart.create({
+              return ProductCart.create({
                 CartId: cartId,
                 ProductId: prodId,
                 amount : totalAmount
@@ -95,7 +92,6 @@ class CartController {
           next({status: 400, message: 'Sorry, Quota Not Enough'})
         }
           
-
       } else {
         next({status: 404, message: 'Sorry, Product Is Not Found'})
       }
@@ -104,100 +100,55 @@ class CartController {
   }
 
   static updateCartList (req, res, next) {
-    let cartId
     let stockProd
-
-    Cart.findOne({
-      where : {
-        UserId: req.isLoggedIn.id
-      }
+    
+    ProductCart.findOne({
+      where: {
+        id: req.params.prodCartId
+      },
+      include: Product
     })
     .then(data => {
-      
-      if (data){
-        cartId = data.id
+      stockProd = data.Product.stock
 
-        return Product.findOne({
-          where: {
-            id: req.params.prodId
-          }
-        })
-        .then(data => {
-          stockProd = data.stock
+      if(data){
 
-          return UserCart.findOne({
+        if(req.body.amount <= stockProd) {
+          return ProductCart.update({
+            amount: req.body.amount
+          },{
             where: {
-              CartId : cartId,
-              ProductId : req.params.prodId
+              id: req.params.prodCartId
             }
           })
           .then(data => {
-
-            if(data){
-
-              if(req.body.amount <= stockProd) {
-                return UserCart.update({
-                  amount: req.body.amount
-                },{
-                  where: {
-                    CartId: cartId,
-                    ProductId: req.params.prodId 
-                  }
-                })
-                .then(data => {
-                  res.status(200).json({message: 'Your Cart has been Updated'})
-                })
-              } else {
-                next({status: 400, message: 'Sorry, Quota Not Enough'})
-              }
-            }
-
-            else{
-              next({status: 404, message: 'Please add Product into your Cart first'})
-            }
+            res.status(200).json({message: 'Your Cart has been Updated'})
           })
 
-        })
-
-      } else {
-        next({status: 404, message: 'Sorry Please contact our services'})
+        } else {
+          next({status: 400, message: 'Sorry, Quota Not Enough'})
+        }
       }
 
+      else{
+        next({status: 404, message: 'Please add Product into your Cart first'})
+      }
     })
     .catch(next)
-  
+
   }
 
   static deleteProdCartList (req, res, next){
 
-    let cartId
-
-    Cart.findOne({
-      where : {
-        UserId: req.isLoggedIn.id
-      }
-    })
-    .then(data => {
-      
-      if (data){
-        cartId = data.id
-
-        return UserCart.destroy({
-          where: {
-            CartId: cartId,
-            ProductId: req.params.prodId 
-          }
-        })
-        .then(data => {
-          res.status(200).json({message: 'Your Cart has been deleted'})
-        })
-
-      } else {
-        next({status: 404, message: 'Sorry Please contact our services'})
-      }
-
-    })
-    .catch(next)
+      ProductCart.destroy({
+        where: {
+          id: req.params.prodCartId 
+        }
+      })
+      .then(data => {
+        res.status(200).json({message: 'Your Cart has been deleted'})
+      })
+      .catch(next)
     
   }
 
@@ -215,7 +166,7 @@ class CartController {
       if (data){
         cartId = data.id
 
-        return UserCart.destroy({
+        return ProductCart.destroy({
           where: {
             CartId: cartId
           }
@@ -233,57 +184,6 @@ class CartController {
 
   }
 
-  static buyInCart (req, res, next) {
-    // Not finished, will try to change again after client finish
-    let cartId
-
-    Cart.findOne({
-      where : {
-        UserId: req.isLoggedIn.id
-      }
-    })
-    .then(data => {
-      
-      if (data){
-        cartId = data.id
-
-        return UserCart.findAll({
-          where: {
-            CartId: cartId
-          },
-          exclude: ['createdAt', 'updatedAt']
-        })
-        .then(data => {
-          console.log(data)
-          if(data.length === 0){
-            next({status: 404, message: "You don't have anything in your Cart"})
-          } else {
-            res.status(200).json(data)
-
-            // return Transaction.bulkCreate(data)
-            // .then(data => {
-              
-            //   return UserCart.destroy({
-            //     where: {
-            //       CartId: cartId
-            //     }
-            //   })
-            //   .then(data => {
-            //     res.status(200).json({message: 'Thanks for your purchasing'})
-            //   })
-            // })
- 
-          }
-        })
-
-      } else {
-        next({status: 404, message: 'Sorry Please contact our services'})
-      }
-
-    })
-    .catch(next)
-  }
- 
 }
 
 module.exports = CartController

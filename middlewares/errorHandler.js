@@ -1,5 +1,3 @@
-const { JsonWebTokenError } = require("jsonwebtoken")
-
 function errorHandler(err , req , res , next){
     console.log(err)
     let message = ''

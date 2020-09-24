@@ -13,7 +13,6 @@ router.use('/' , userRouter)
 router.use(authenticate)
 router.use('/products' , productRouter)
 router.use('/carts', cartRouter)
-router.use('/transactions', transactionRouter)
 router.use(errorHandler)
 
 module.exports = router
