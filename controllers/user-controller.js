@@ -14,7 +14,6 @@ class UserController{
       })
     }
     else{
-      try{
         const user = await User.findOne({ where: { email: req.body.email }})
         if(!user){
           return res.status(401).json({
@@ -32,10 +31,6 @@ class UserController{
             })
           }
         }
-      }
-      catch(err){
-        res.json(err)
-      }
     }
   }
   static postRegister(req,res){
