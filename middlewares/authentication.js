@@ -17,6 +17,7 @@ function authentication(req,res,next){
       })
       .then(user =>{
         if(user){
+          req.userCart = user
           req.loggedInUser = payload
           next()
         }
