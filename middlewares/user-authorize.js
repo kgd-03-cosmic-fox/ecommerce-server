@@ -1,20 +1,21 @@
 const { User,Cart,CartProduct } = require('../models')
 const jwt = require('jsonwebtoken')
 function authorizationUser(req,res,next){
-  try{
-    Cart.findOne({
+    let cartId;
+    CartProduct.findOne({
       where: {
-        UserId: req.loggedInUser.id
+        id: req.params.id
       }
     })
-    .then(cart => {
-      return CartProduct.findOne({
+    .then(cartProduct => {
+      cartId = cartProduct.CartId
+      return Cart.findOne({
         where: {
-          CartId: cart.id
+          UserId: req.loggedInUser.id
         }
       })
-      .then(cartProduct => {
-        if(cartProduct) {
+      .then(cart => {
+        if(cart.id == cartId) {
           next()
         }
         else {
@@ -27,10 +28,5 @@ function authorizationUser(req,res,next){
     .catch(err => {
       res.status(500).json(err)
     })
-  }
-  catch(err){
-    console.log(err)
-    res.status(500).json(err)
-  }
 }
 module.exports = authorizationUser

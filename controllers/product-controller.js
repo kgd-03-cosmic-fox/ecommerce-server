@@ -19,7 +19,11 @@ class ProductController{
     })
   }
   static getProduct(err,res,next){
-    Product.findAll()
+    Product.findAll({
+      attributes:{
+        exclude: ['createdAt','updatedAt']
+      }
+    })
     .then(product =>{
       res.status(200).json(product)
     })

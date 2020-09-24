@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { User } = require('../models/index.js')
+const { User,Cart } = require('../models/index.js')
 function authentication(req,res,next){
   if(!req.headers.access_token){
     res.status(401).json({
@@ -12,7 +12,8 @@ function authentication(req,res,next){
       User.findOne({
         where:{
           email:payload.email
-        }
+        },
+        include: Cart
       })
       .then(user =>{
         if(user){
