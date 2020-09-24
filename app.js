@@ -2,7 +2,7 @@ if(process.env.NODE_ENV == "development"){
     require('dotenv').config()
   }
 
-require('dotenv').config() // Matiin saat ingin deploy
+// require('dotenv').config() // Matiin saat ingin deploy
 
 const express = require(`express`)
 const app = express()

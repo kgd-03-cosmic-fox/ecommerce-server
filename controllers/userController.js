@@ -1,7 +1,7 @@
 const {User, Cart} = require(`../models`)
 const bcrypt = require('bcryptjs')
 const jwt = require(`jsonwebtoken`)
-require('dotenv').config()
+// require('dotenv').config()
 
 class Controller{
     static postRegister(req,res,next){
