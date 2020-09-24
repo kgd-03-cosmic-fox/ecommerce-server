@@ -16,10 +16,11 @@ function customerAuthorization (req,res,next) {
       })
     }
   })
-  .catch(_=>{
-    res.status(400).json({
-      message: "Unauthorized"
-    })
+  .catch(err=>{
+    res.send(err)
+    // res.status(400).json({
+    //   message: "Unauthorized"
+    // })
   })
 }
 

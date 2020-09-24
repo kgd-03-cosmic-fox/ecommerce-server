@@ -1,79 +1,66 @@
-const { CartProduct, Product, Cart } = require(`../models`)
+const { CartProduct, Product } = require(`../models`)
 
 class CartController {
   static postCart (req,res,next) {
     CartProduct.findOne({
       where: {
+        CartId: req.loggedInUser.CartId,
         ProductId: req.params.productId
-      }
+      },
+      include: [Product]
     })
-    .then(data => {
-      if(!data){
-        Product.findOne({
-          where: {
-            id: req.params.productId
-          }
-        })
-        .then(product => {
-          if(product){
-            if (Number(req.body.amount) <= Number(product.stock)){
-              return CartProduct.create({
-                CartId: req.loggedInUser.CartId,
-                ProductId: req.params.productId,
-                amount: req.body.amount
-              })
-              .then(_ => {
-                res.status(200).json({
-                  message: "Success adding product to shopping",
-                })
-              })
-              .catch(err => {
-                next(err)
-              })
-            } else {
-              res.status(400).json({
-                error: `Stock limit is reached`,
-                name: product.name,
-                stock: product.stock
-              })
+    .then(cartProduct => {
+      if (cartProduct) {
+        console.log(cartProduct.Product.stock)
+        console.log(Number(req.body.amount))
+        console.log(Number(req.body.amount))
+        if( cartProduct.Product.stock >= (Number(req.body.amount) + Number(cartProduct.amount))) {
+          console.log('terpanggil')
+          cartProduct.update({
+            amount: Number(req.body.amount) + Number(cartProduct.amount)
+          },{
+            where: {
+              cartProduct: req.loggedInUser.CartId,
+              ProductId: req.params.productId
             }
-          } else{
-            res.status(404).json({
-              error: 'Not found error: 404'
+          })
+          .then(cartProduct => {
+            res.status(200).json({
+              message: "Success adding product to shopping cart",
+              cartProduct
             })
-          }
-        })
-      }
-      else{
+          })
+          .catch(err=>{
+            next(err)
+          })
+        } else {
+          res.status(400).json({
+            message: "Maximum quantity reached"
+          })
+        }
+      } else {
         Product.findOne({
           where: {
             id: req.params.productId
           }
         })
         .then(product => {
-          if ((Number(product.amount) + Number(req.body.amount)) <= Number(product.stock)){
-            return CartProduct.update({
-              amount: Number(product.amount) + Number(req.body.amount)
-            },{
-              where:{
-                ProductId: req.params.productId
-              }
+          if(Number(product.stock) >= Number(req.body.amount)) {
+            CartProduct.create({
+              ProductId: req.params.productId,
+              CartId: req.loggedInUser.CartId,
+              amount: req.body.amount
             })
-            .then(_ => {
-              res.status(200).json({
-                message: "Success adding product to shopping",
-              })
+            .then(cartProduct=>{
+              res.send(cartProduct)
             })
-            .catch(err => {
+            .catch(err=>{
               next(err)
             })
-          }
-          else {
+          } else {
             res.status(400).json({
-              message: `Stock limit is reached`,
-              name: product.name,
-              stock: product.stock
-            })
+              message: "Maximum quantity reached"
+            }) 
           }
         })
       }
@@ -83,8 +70,13 @@ class CartController {
     })
   }
   static getCart (req,res,next) {
+    console.log(req.loggedInUser.CartId)
     CartProduct.findAll({
-      include:[Product]
+      where:{
+          CartId: Number(req.loggedInUser.CartId)
+        },
+        order: [['id', 'ASC']],
+      include: Product
     })
     .then(cartProduct=>{
       if(cartProduct.length==0){
@@ -92,7 +84,6 @@ class CartController {
           message: "Your shopping cart is empty"
         })
       } else{
-
         res.status(200).json({
           cartProduct
         })
@@ -103,7 +94,7 @@ class CartController {
     })
     }
   static patchCart (req,res,next) {
-
+    
   }
   static deleteCart (req,res,next) {
     CartProduct.findOne({

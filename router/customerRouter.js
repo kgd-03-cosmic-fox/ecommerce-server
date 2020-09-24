@@ -13,9 +13,9 @@ router.post(`/login`, UserController.postLogin)
 router.use(authentication)
 router.use(`/product`, productRouter)
 router.post(`/cart/:productId`, customerAuthorization, CartController.postCart)
-router.get(`/cart`, CartController.getCart)
-router.patch(`/cart/:cartProductId`, CartController.patchCart)
-router.delete(`/cart/:cartProductId`, CartController.deleteCart)
+router.get(`/cart`, customerAuthorization, CartController.getCart)
+router.patch(`/cart/:cartProductId`, customerAuthorization, CartController.patchCart)
+router.delete(`/cart/:cartProductId`, customerAuthorization, CartController.deleteCart)
 
 router.use(errorHandler)
 
