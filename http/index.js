@@ -6,6 +6,6 @@ if (process.env.NODE_ENV !== 'production') {
 const http = require('http');
 const server = http.createServer(app);
 
-server.listen(port, function() {
-  console.log('Express running on port', port);
-});
+// app.listen(port, function() {
+//   console.log('Express running on port', port);
+// });
