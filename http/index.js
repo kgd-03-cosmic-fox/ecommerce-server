@@ -1,11 +1,7 @@
-const app = require('../app.js')
-if (process.env.NODE_ENV !== 'production') {
-  const port = 3007 || process.env.PORT
-}
-// const port = 3007 || process.env.PORT
-const http = require('http');
-const server = http.createServer(app);
+const app = require('../app')
 
-// app.listen(port, function() {
-//   console.log('Express running on port', port);
-// });
+let port = process.env.PORT || 3000
+
+app.listen(port , ()=>{
+    console.log(`listening in port ${port}`)
+})
