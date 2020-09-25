@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate:{
         min: {
-          args: [0],
-          msg: 'Invalid input, amount is under 0'
+          args: [1],
+          msg: 'Amount minimum is 1'
         }
       }
     }

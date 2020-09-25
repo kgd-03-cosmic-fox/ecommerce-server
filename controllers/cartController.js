@@ -11,12 +11,8 @@ class CartController {
     })
     .then(cartProduct => {
       if (cartProduct) {
-        console.log(cartProduct.Product.stock)
-        console.log(Number(req.body.amount))
-        console.log(Number(req.body.amount))
         if( cartProduct.Product.stock >= (Number(req.body.amount) + Number(cartProduct.amount))) {
-          console.log('terpanggil')
-          cartProduct.update({
+          return cartProduct.update({
             amount: Number(req.body.amount) + Number(cartProduct.amount)
           },{
             where: {
@@ -24,10 +20,9 @@ class CartController {
               ProductId: req.params.productId
             }
           })
-          .then(cartProduct => {
+          .then(_ => {
             res.status(200).json({
-              message: "Success adding product to shopping cart",
-              cartProduct
+              message: "Success adding product to shopping cart"
             })
           })
           .catch(err=>{
@@ -39,20 +34,22 @@ class CartController {
           })
         }
       } else {
-        Product.findOne({
+       return Product.findOne({
           where: {
             id: req.params.productId
           }
         })
         .then(product => {
           if(Number(product.stock) >= Number(req.body.amount)) {
-            CartProduct.create({
+           return CartProduct.create({
               ProductId: req.params.productId,
               CartId: req.loggedInUser.CartId,
               amount: req.body.amount
             })
-            .then(cartProduct=>{
-              res.send(cartProduct)
+            .then(_=>{
+              res.status(200).json({
+                message: "Success adding product to shopping cart"
+              })
             })
             .catch(err=>{
               next(err)
