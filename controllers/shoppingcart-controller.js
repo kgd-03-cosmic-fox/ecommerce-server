@@ -41,7 +41,7 @@ class ShoppingCartController {
         attributes: { include: ['id', 'amount'] },
         where: { ShoppingCartId: cartInfo.id, ProductId: Number(req.params.productId), status: 0 }
       });
-      
+
       let currentItem = await Product.findOne({ where: { id: req.params.productId } })
 
       if (dupecheck === null) {
@@ -93,7 +93,7 @@ class ShoppingCartController {
       })
   }
 
-  static removeFromCartDeleteHandler(req, res, next) { //params: cartProductId for now
+  static removeFromCartDeleteHandler(req, res, next) { //params: cartProductId
     CartProduct.destroy({ where: { id: req.params.cartProductId } })
       .then((result) => {
         res.status(200).json({ message: "Delete successful." });
@@ -101,6 +101,30 @@ class ShoppingCartController {
       .catch((err) => {
         next(err);
       })
+  }
+
+  static async checkoutPatchHandler(req, res, next) { // params: cartId path: /cart/checkout
+    try {
+      const cartInfo = await ShoppingCart.findOne({ where: { UserId: req.tokenPayload.id } })
+      const result = await CartProduct.update({ status: 1 },
+        { where: { ShoppingCartId: cartInfo.id, status: 0 } })
+      res.status(200).json({ message: 'Checked out successfully!' })
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async showPurchaseHistoryGetHandler(req, res, next) { //path: /cart/history
+    try {
+      const cartInfo = await ShoppingCart.findOne({ where: { UserId: req.tokenPayload.id } })
+      const data = await CartProduct.findAll({
+        where: { ShoppingCartId: cartInfo.id, status: 1 },
+        include: Product
+      })
+      res.status(200).json(data);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

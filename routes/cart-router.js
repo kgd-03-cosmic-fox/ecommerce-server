@@ -6,6 +6,8 @@ const authenticateUser = require('../middlewares/authentication');
 
 router.use(authenticateUser);
 router.get('/', ShoppingCartController.fetchCartContentGetHandler);
+router.get('/history', ShoppingCartController.showPurchaseHistoryGetHandler);
+router.patch('/checkout', ShoppingCartController.checkoutPatchHandler);
 router.post('/:productId', ShoppingCartController.addToCartPostHandler); //uses token so it doesnt need auth
 router.patch('/:cartProductId', cartAuthorization, ShoppingCartController.editCartItemQuantityPatchHandler);
 router.delete('/:cartProductId', cartAuthorization, ShoppingCartController.removeFromCartDeleteHandler);
